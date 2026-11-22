@@ -22,9 +22,11 @@ IFACE=$(ip -o link show | awk -F': ' '$2!="lo"{print $2; exit}')
 passo() { echo; echo "==== $* ===="; }
 
 trocar_espelho() {
+    shopt -s nullglob
     for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list; do
         [ -f "$f" ] && sed -i -E 's#https?://mirrors\.tuna\.tsinghua\.edu\.cn/ubuntu#http://br.archive.ubuntu.com/ubuntu#g' "$f"
     done
+    shopt -u nullglob
 }
 
 case "$MODO" in

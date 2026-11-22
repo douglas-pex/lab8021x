@@ -23,9 +23,11 @@ passo() { echo; echo "==== $* ===="; }
 passo "Hostname, fuso e espelho do apt"
 hostnamectl set-hostname "$NOME"
 timedatectl set-timezone America/Sao_Paulo
+shopt -s nullglob
 for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list; do
     [ -f "$f" ] && sed -i -E 's#https?://mirrors\.tuna\.tsinghua\.edu\.cn/ubuntu#http://br.archive.ubuntu.com/ubuntu#g' "$f"
 done
+shopt -u nullglob
 
 passo "Rede (DHCP da Fase 0) na interface $IFACE"
 ip -4 addr show "$IFACE" | grep -q "inet " || dhclient -v "$IFACE"
